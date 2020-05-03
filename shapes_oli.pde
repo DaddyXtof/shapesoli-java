@@ -8,6 +8,8 @@ import java.util.*;
 GButton btnLoad, btnSave, btnQuit;
 GDropList drpList;
 GView view2D, view3D;
+GToggleGroup toggleGroup;
+GOption[] options;
 PShape shape;
 Map<String,PShape> map=new HashMap<String,PShape>();
 enum selectableShape {NOTHING, CIRCLE, SQUARE, TRIANGLE};
@@ -53,6 +55,9 @@ public void handleDrpList(GDropList list, GEvent event)
 void setup()
 {
 	size(1600,1000,P2D);
+	//pixelDensity(2);
+	pixelDensity(displayDensity());
+	println("PixelDensity: "+displayDensity());
 	background(#FAC218);
 	selectedShape=selectableShape.NOTHING;
 
@@ -73,13 +78,24 @@ void setup()
 	shapeList[3]="Triangle";
 	drpList.setItems(shapeList , 0);	
 
+	String[] t = new String[] {
+		"Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6",
+		"Layer 7", "Layer 8", "Layer 9", "Path"
+	};
+
+	toggleGroup = new GToggleGroup();
+	options = new GOption[t.length];
+	for (int i=0; i<options.length;i++) {
+		options[i] = new GOption(this, 10, 170+i*30, 70, 30);
+		options[i].setText(t[i]);
+		toggleGroup.addControl(options[i]);
+	}
 	view2D = new GView(this, 90, 10, (width-110)/2, height-20, P2D);
 	view3D = new GView(this, 90+(width-110)/2+10, 10, (width-110)/2, height-20, P3D);
 	Classview2D viewer2D = new Classview2D();
 	Classview3D viewer3D = new Classview3D();
 	view2D.addListener(viewer2D);
 	view3D.addListener(viewer3D);
-
 }
 
 void draw()
